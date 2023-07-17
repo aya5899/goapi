@@ -12,8 +12,13 @@ func main() {
 		// return "string" whatever received
 		io.WriteString(w, "Hello, world!\n")
 	}
+
+	postArticleHandler := func(w http.ResponseWriter, req *http.Request) {
+		io.WriteString(w, "Posting Article...\n")
+	}
 	// register helloHandler
 	http.HandleFunc("/hello", helloHandler)
+	http.HandleFunc("/article", postArticleHandler)
 
 	log.Println("server start at port 8080")
 	// launch server
