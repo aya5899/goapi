@@ -1,24 +1,20 @@
 package main
 
 import (
-	"io"
 	"log"
 	"net/http"
+
+	"github.com/aya5899/goapi/handlers"
 )
 
 func main() {
-	// define handler
-	helloHandler := func(w http.ResponseWriter, req *http.Request) {
-		// return "string" whatever received
-		io.WriteString(w, "Hello, world!\n")
-	}
-
-	postArticleHandler := func(w http.ResponseWriter, req *http.Request) {
-		io.WriteString(w, "Posting Article...\n")
-	}
-	// register helloHandler
-	http.HandleFunc("/hello", helloHandler)
-	http.HandleFunc("/article", postArticleHandler)
+	// register Handlers
+	http.HandleFunc("/hello", handlers.HelloHandler)
+	http.HandleFunc("/article", handlers.PostArticleHandler)
+	http.HandleFunc("/article/list", handlers.ArticleListHandler)
+	http.HandleFunc("/article/1", handlers.ArticleDetailHandler)
+	http.HandleFunc("/article/nice", handlers.PostNiceHandler)
+	http.HandleFunc("/comment", handlers.PostCommentHandler)
 
 	log.Println("server start at port 8080")
 	// launch server
