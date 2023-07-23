@@ -17,6 +17,7 @@ func HelloHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func PostArticleHandler(w http.ResponseWriter, req *http.Request) {
+	// リクエストボディの内容を格納するバイトスライスの定義
 	length, err := strconv.Atoi(req.Header.Get("Content-Length"))
 	if err != nil {
 		http.Error(w, "cannot get content length\n", http.StatusBadRequest)
@@ -24,6 +25,7 @@ func PostArticleHandler(w http.ResponseWriter, req *http.Request) {
 	}
 	reqBodybuffer := make([]byte, length)
 
+	// リクエストボディの読み出し
 	if _, err := req.Body.Read(reqBodybuffer); !errors.Is(err, io.EOF) {
 		http.Error(w, "failed to get request body\n", http.StatusBadRequest)
 		return
@@ -31,7 +33,15 @@ func PostArticleHandler(w http.ResponseWriter, req *http.Request) {
 
 	defer req.Body.Close()
 
-	article := models.Article1
+	// json -> Goのデコード処理
+	var reqArticle models.Article
+	if err := json.Unmarshal(reqBodybuffer, &reqArticle); err != nil {
+		http.Error(w, "failed to get request body\n", http.StatusBadRequest)
+		return
+	}
+
+	article := reqArticle
+	// article := models.Article1
 	jsonData, err := json.Marshal(article)
 	if err != nil {
 		http.Error(w, "failed to encode json\n", http.StatusInternalServerError)
