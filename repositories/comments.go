@@ -33,7 +33,7 @@ func SelectCommentList(db *sql.DB, articleID int) ([]models.Comment, error) {
 		where article_id = ?;
 		`
 
-	rows, err := db.Query(sqlStr)
+	rows, err := db.Query(sqlStr, articleID)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
