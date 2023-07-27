@@ -21,7 +21,7 @@ func TestSelectArticleDetail(t *testing.T) {
 				Title:    "firstPost",
 				Contents: "This is my first blog",
 				UserName: "mayah",
-				NiceNum:  3,
+				NiceNum:  6,
 			},
 		},
 		{
@@ -78,7 +78,7 @@ func TestInsertArticle(t *testing.T) {
 		Contents: "testest",
 		UserName: "mayah",
 	}
-	expectedArticleNum := 7
+	expectedArticleNum := 11
 	newArticle, err := repositories.InsertArticle(testDB, article)
 	if err != nil {
 		t.Error(err)
@@ -94,4 +94,20 @@ func TestInsertArticle(t *testing.T) {
 		`
 		testDB.Exec(sqlStr, article.Title, article.Contents, article.UserName)
 	})
+}
+
+func TestUpdateNiceNum(t *testing.T) {
+	articleID := 1
+	got, err := repositories.SelectArticleDetail(testDB, articleID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	expectedNiceNum := 6
+	err = repositories.UpdateNiceNum(testDB, articleID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.NiceNum != expectedNiceNum {
+		t.Errorf("nicenum is expected %d but got %d\n", expectedNiceNum, got.NiceNum)
+	}
 }
