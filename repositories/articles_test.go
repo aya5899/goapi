@@ -5,6 +5,7 @@ import (
 
 	"github.com/aya5899/goapi/models"
 	"github.com/aya5899/goapi/repositories"
+	"github.com/aya5899/goapi/repositories/testdata"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -16,23 +17,11 @@ func TestSelectArticleDetail(t *testing.T) {
 	}{
 		{
 			testTitle: "subtest1",
-			expected: models.Article{
-				ID:       1,
-				Title:    "firstPost",
-				Contents: "This is my first blog",
-				UserName: "mayah",
-				NiceNum:  6,
-			},
+			expected:  testdata.ArticleTestData[0],
 		},
 		{
 			testTitle: "subtest2",
-			expected: models.Article{
-				ID:       2,
-				Title:    "2nd",
-				Contents: "Second blog post",
-				UserName: "mayah",
-				NiceNum:  4,
-			},
+			expected:  testdata.ArticleTestData[1],
 		},
 	}
 
@@ -62,7 +51,7 @@ func TestSelectArticleDetail(t *testing.T) {
 }
 
 func TestSelectArticleList(t *testing.T) {
-	expectedNum := 2
+	expectedNum := len(testdata.ArticleTestData)
 	got, err := repositories.SelectArticleList(testDB, 1)
 	if err != nil {
 		t.Fatal(err)
@@ -78,7 +67,7 @@ func TestInsertArticle(t *testing.T) {
 		Contents: "testest",
 		UserName: "mayah",
 	}
-	expectedArticleNum := 11
+	expectedArticleNum := 3
 	newArticle, err := repositories.InsertArticle(testDB, article)
 	if err != nil {
 		t.Error(err)
@@ -98,16 +87,19 @@ func TestInsertArticle(t *testing.T) {
 
 func TestUpdateNiceNum(t *testing.T) {
 	articleID := 1
-	got, err := repositories.SelectArticleDetail(testDB, articleID)
+	prevArticle, err := repositories.SelectArticleDetail(testDB, articleID)
 	if err != nil {
 		t.Fatal(err)
 	}
-	expectedNiceNum := 6
 	err = repositories.UpdateNiceNum(testDB, articleID)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got.NiceNum != expectedNiceNum {
-		t.Errorf("nicenum is expected %d but got %d\n", expectedNiceNum, got.NiceNum)
+	nextArticle, err := repositories.SelectArticleDetail(testDB, articleID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if nextArticle.NiceNum != prevArticle.NiceNum+1 {
+		t.Errorf("failed to update nice num")
 	}
 }
