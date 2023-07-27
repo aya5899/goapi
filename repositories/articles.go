@@ -41,7 +41,7 @@ func SelectArticleList(db *sql.DB, page int) ([]models.Article, error) {
 	articleArray := make([]models.Article, 0)
 	for rows.Next() {
 		var article models.Article
-		err = rows.Scan(&article.ID, &article.Contents, &article.UserName, &article.NiceNum)
+		err = rows.Scan(&article.ID, &article.Title, &article.Contents, &article.UserName, &article.NiceNum)
 		if err != nil {
 			fmt.Println(err)
 			return nil, err
