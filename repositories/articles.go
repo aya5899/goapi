@@ -28,7 +28,7 @@ func SelectArticleList(db *sql.DB, page int) ([]models.Article, error) {
 	const sqlStr = `
 		select article_id, title, contents, username, nice
 		from articles
-		limit ? offset?
+		limit ? offset?;
 		`
 	pageLimit := 5
 	rows, err := db.Query(sqlStr, pageLimit, ((page - 1) * pageLimit))
