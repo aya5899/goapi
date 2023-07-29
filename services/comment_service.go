@@ -5,15 +5,9 @@ import (
 	"github.com/aya5899/goapi/repositories"
 )
 
-func PostCommentService(comment models.Comment) (models.Comment, error) {
-	// databaseへの接続
-	db, err := connectDB()
-	if err != nil {
-		return models.Comment{}, err
-	}
-	defer db.Close()
+func (s *MyAppService) PostCommentService(comment models.Comment) (models.Comment, error) {
 	// databaseへのコメントへの挿入
-	newComment, err := repositories.InsertComment(db, comment)
+	newComment, err := repositories.InsertComment(s.db, comment)
 	if err != nil {
 		return models.Comment{}, err
 	}
