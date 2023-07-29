@@ -6,20 +6,20 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/aya5899/goapi/controllers/services"
 	"github.com/aya5899/goapi/models"
-	"github.com/aya5899/goapi/services"
 	"github.com/gorilla/mux"
 )
 
 type MyAppController struct {
-	service *services.MyAppService
+	service services.MyAppServicer
 }
 
-func NewMyAppController(s *services.MyAppService) *MyAppController {
+func NewMyAppController(s services.MyAppServicer) *MyAppController {
 	return &MyAppController{service: s}
 }
 
-func HelloHandler(w http.ResponseWriter, req *http.Request) {
+func (c *MyAppController) HelloHandler(w http.ResponseWriter, req *http.Request) {
 	io.WriteString(w, "Hello, World!\n")
 }
 
