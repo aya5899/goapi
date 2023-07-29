@@ -27,9 +27,10 @@ func main() {
 		return
 	}
 	ser := services.NewMyAppService(db)
-	con := controllers.NewMyAppController(ser)
+	aCon := controllers.NewArticleController(ser)
+	cCon := controllers.NewCommentController(ser)
 
-	r := routers.NewRouter(con)
+	r := routers.NewRouter(aCon, cCon)
 
 	log.Println("server start at port 8080")
 	// launch server
