@@ -58,11 +58,13 @@ func SelectArticleDetail(db *sql.DB, articleID int) (models.Article, error) {
 		where article_id = ?;
 		`
 
+	// クエリの実行
 	row := db.QueryRow(sqlStr, articleID)
 	if err := row.Err(); err != nil {
 		fmt.Println(err)
 		return models.Article{}, err
 	}
+	// 結果の読み出し
 	var article models.Article
 	var createdTime sql.NullTime
 	err := row.Scan(&article.ID, &article.Title, &article.Contents, &article.UserName, &article.NiceNum, &createdTime)
