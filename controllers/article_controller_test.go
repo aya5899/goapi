@@ -14,12 +14,12 @@ func TestArticleListHandler(t *testing.T) {
 		resultCode int
 	}{
 		{name: "number query", query: "1", resultCode: http.StatusOK},
-		{name: "number query", query: "aaa", resultCode: http.StatusBadRequest},
+		{name: "alphabet query", query: "aaa", resultCode: http.StatusBadRequest},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			url := fmt.Sprintf("http:/localhost:8080/article/list?page=%s, ", tt.query)
+			url := fmt.Sprintf("http://localhost:8080/article/list?page=%s", tt.query)
 			req := httptest.NewRequest(http.MethodGet, url, nil)
 
 			res := httptest.NewRecorder()
